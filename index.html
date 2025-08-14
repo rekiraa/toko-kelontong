@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Toko Segar - Belanja Sayur & Buah Online</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" xintegrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+      body {
+        font-family: 'Inter', sans-serif;
+        /* Latar belakang ceria dengan gradient warna */
+        background: linear-gradient(to bottom right, #fef2f2, #fffbeb, #ecfdf5, #eff6ff);
+        background-attachment: fixed; /* Membuat gradient tetap saat di-scroll */
+        scroll-behavior: smooth;
+      }
+      .bg-sayurbox-primary {
+        background-color: #0d9488;
+      }
+      .text-sayurbox-primary {
+        color: #0d9488;
+      }
+      .border-sayurbox-primary {
+        border-color: #0d9488;
+      }
+      .card-bg {
+        background-color: rgba(255, 255, 255, 0.9); /* Latar belakang semi-transparan untuk konten */
+      }
+
+      /* --- CSS untuk Motion Effects --- */
+
+      /* Efek muncul dari bawah (default) */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Efek muncul dari kiri */
+      @keyframes fadeInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      /* Efek muncul dari kanan */
+      @keyframes fadeInRight {
+        from {
+          opacity: 0;
+          transform: translateX(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      /* Efek scale-in */
+      @keyframes scaleIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      /* Kelas utilitas untuk elemen yang akan dianimasikan */
+      .animate-on-scroll {
+        opacity: 0;
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+
+      .animate-on-scroll.animated {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .animate-on-scroll.animated.fade-in-up {
+        animation: fadeInUp 0.6s ease-out forwards;
+      }
+      .animate-on-scroll.animated.fade-in-left {
+        animation: fadeInLeft 0.6s ease-out forwards;
+      }
+      .animate-on-scroll.animated.fade-in-right {
+        animation: fadeInRight 0.6s ease-out forwards;
+      }
+      .animate-on-scroll.animated.scale-in {
+        animation: scaleIn 0.6s ease-out forwards;
+      }
+
+      /* Menambahkan sedikit delay pada elemen tertentu */
+      .animate-delay-100 {
+        animation-delay: 0.1s;
+      }
+      .animate-delay-200 {
+        animation-delay: 0.2s;
+      }
+      .animate-delay-300 {
+        animation-delay: 0.3s;
+      }
+      .animate-delay-400 {
+        animation-delay: 0.4s;
+      }
+      .animate-delay-500 {
+        animation-delay: 0.5s;
+      }
+      .animate-delay-600 {
+        animation-delay: 0.6s;
+      }
+    </style>
+  </head>
+  <body class="antialiased">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md fixed w-full z-50">
+      <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <a href="#hero-section" class="text-2xl font-bold text-sayurbox-primary scroll-link"> Toko Segar </a>
+        <div class="hidden md:flex space-x-6 items-center">
+          <a href="#hero-section" class="text-gray-600 hover:text-sayurbox-primary font-medium scroll-link">Beranda</a>
+          <a href="#produk-unggulan-section" class="text-gray-600 hover:text-sayurbox-primary font-medium scroll-link">Produk</a>
+          <a href="#promo-section" class="text-gray-600 hover:text-sayurbox-primary font-medium scroll-link">Promo</a>
+          <a href="#testimoni-section" class="text-gray-600 hover:text-sayurbox-primary font-medium scroll-link">Testimoni</a>
+          <button class="bg-sayurbox-primary text-white px-5 py-2 rounded-full font-semibold hover:bg-teal-700 transition duration-300">Masuk</button>
+        </div>
+        <div class="md:hidden">
+          <button id="menu-toggle" class="text-gray-600 focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <!-- Mobile Menu -->
+      <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg">
+        <a href="#hero-section" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 scroll-link">Beranda</a>
+        <a href="#produk-unggulan-section" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 scroll-link">Produk</a>
+        <a href="#promo-section" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 scroll-link">Promo</a>
+        <a href="#testimoni-section" class="block px-4 py-2 text-gray-600 hover:bg-gray-100 scroll-link">Testimoni</a>
+        <a href="#" class="block px-4 py-2 text-gray-600 hover:bg-gray-100">Masuk</a>
+      </div>
+    </nav>
+    <div class="h-16"></div>
+
+    <!-- Hero Section -->
+    <header id="hero-section" class="py-12 md:py-20 lg:py-24">
+      <div class="container mx-auto px-4 card-bg p-8 rounded-3xl shadow-lg">
+        <div class="flex flex-col md:flex-row items-center gap-8">
+          <div class="md:w-1/2 text-center md:text-left">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-800 animate-on-scroll fade-in-left">Sayur dan Buah Segar Langsung ke Rumahmu</h1>
+            <p class="mt-4 md:mt-6 text-lg md:text-xl text-gray-600 animate-on-scroll fade-in-left animate-delay-200">Belanja kebutuhan harian jadi lebih mudah, cepat, dan higienis. Nikmati kualitas terbaik dari petani lokal.</p>
+            <div class="mt-8 animate-on-scroll fade-in-left animate-delay-400">
+              <a href="#produk-unggulan-section" class="inline-block bg-sayurbox-primary text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-teal-700 transition duration-300 shadow-lg scroll-link"> Mulai Belanja Sekarang </a>
+            </div>
+          </div>
+          <div class="md:w-1/2 mt-8 md:mt-0 flex justify-center animate-on-scroll fade-in-right animate-delay-400">
+            <img src="https://w7.pngwing.com/pngs/774/38/png-transparent-vegetable-organic-food-fruit-vegetable-natural-foods-leaf-vegetable-food.png" alt="Aneka Sayur Segar" class="rounded-3xl shadow-xl max-w-full h-auto" />
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Cara Kami Bekerja Section -->
+    <section id="cara-kerja-section" class="py-16">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12 animate-on-scroll fade-in-up">Cara Kami Bekerja</h2>
+        <!-- Grid 3 kolom untuk desktop, 1 kolom untuk mobile -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <div class="p-8 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 animate-on-scroll scale-in animate-delay-200">
+            <!-- Gambar untuk Pilih Produk -->
+            <img src="https://png.pngtree.com/png-vector/20230508/ourmid/pngtree-vegetable-set-vector-png-image_7089241.png" alt="Gambar memilih produk" class="w-20 h-20 mx-auto mb-4 rounded-full" />
+            <h3 class="text-xl font-bold mb-2">Pilih Produk</h3>
+            <p class="text-gray-600">Jelajahi berbagai pilihan sayur, buah, dan kebutuhan harian lainnya.</p>
+          </div>
+          <div class="p-8 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 animate-on-scroll scale-in animate-delay-400">
+            <!-- Gambar untuk Pesan & Bayar -->
+            <img src="https://w7.pngwing.com/pngs/47/742/png-transparent-shopping-cart-full-illustration.png" alt="Gambar keranjang belanja" class="w-20 h-20 mx-auto mb-4 rounded-full" />
+            <h3 class="text-xl font-bold mb-2">Pesan & Bayar</h3>
+            <p class="text-gray-600">Tambahkan produk ke keranjang dan selesaikan pembayaran dengan mudah.</p>
+          </div>
+          <div class="p-8 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 animate-on-scroll scale-in animate-delay-600">
+            <!-- Gambar untuk Nikmati di Rumah -->
+            <img src="https://png.pngtree.com/png-vector/20210530/ourlarge/pngtree-courier-vector-delivery-illustration-with-motorcycle-png-image_3395639.jpg" alt="Gambar kurir pengiriman" class="w-20 h-20 mx-auto mb-4 rounded-full" />
+            <h3 class="text-xl font-bold mb-2">Nikmati di Rumah</h3>
+            <p class="text-gray-600">Pesananmu akan diantar dengan aman langsung ke depan pintumu.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kategori Produk -->
+    <section id="kategori-section" class="py-16">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12 animate-on-scroll fade-in-up">Pilih Kategori Favoritmu</h2>
+        <!-- Grid responsif: 2 kolom untuk mobile, 3 kolom untuk tablet, 6 kolom untuk desktop -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+          <a href="#" class="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 animate-on-scroll scale-in animate-delay-100">
+            <!-- Gambar untuk Sayuran -->
+            <img src="https://png.pngtree.com/png-vector/20240101/ourmid/pngtree-decorative-vegetable-group-png-image_11399203.png" alt="Kategori Sayuran" class="w-16 h-16 mb-4" />
+            <span class="text-center font-semibold text-gray-700">Sayuran</span>
+          </a>
+          <a href="#" class="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 animate-on-scroll scale-in animate-delay-200">
+            <!-- Gambar untuk Buah-buahan -->
+            <img src="https://w7.pngwing.com/pngs/102/117/png-transparent-assorted-fruits-display-fruit-fruit-natural-foods-frutti-di-bosco-image-file-formats.png" alt="Kategori Buah-buahan" class="w-16 h-16 mb-4" />
+            <span class="text-center font-semibold text-gray-700">Buah-buahan</span>
+          </a>
+          <a href="#" class="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 animate-on-scroll scale-in animate-delay-300">
+            <!-- Gambar untuk Daging & Ikan -->
+            <img src="https://w7.pngwing.com/pngs/152/473/png-transparent-raw-meat-and-fish-seafood-meat-fish-protein-meat-food-beef-recipe-thumbnail.png" alt="Kategori Daging & Ikan" class="w-16 h-16 mb-4" />
+            <span class="text-center font-semibold text-gray-700">Daging & Ikan</span>
+          </a>
+          <a href="#" class="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 animate-on-scroll scale-in animate-delay-400">
+            <!-- Gambar untuk Sembako -->
+            <img src="https://clipground.com/images/sembako-png-2.jpg" alt="Kategori Sembako" class="w-16 h-16 mb-4" />
+            <span class="text-center font-semibold text-gray-700">Sembako</span>
+          </a>
+          <a href="#" class="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 animate-on-scroll scale-in animate-delay-500">
+            <!-- Gambar untuk Bumbu Dapur -->
+            <img src="https://w7.pngwing.com/pngs/328/619/png-transparent-kitchen-condiments-chili-star-anise-cinnamon.png" alt="Kategori Bumbu Dapur" class="w-16 h-16 mb-4" />
+            <span class="text-center font-semibold text-gray-700">Bumbu Dapur</span>
+          </a>
+          <a href="#" class="flex flex-col items-center p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 animate-on-scroll scale-in animate-delay-600">
+            <!-- Gambar untuk Jajanan -->
+            <img src="https://e7.pngegg.com/pngimages/412/1001/png-clipart-snack-icon-physical-snacks-food-photography.png" alt="Kategori Jajanan" class="w-16 h-16 mb-4" />
+            <span class="text-center font-semibold text-gray-700">Jajanan</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Produk Unggulan Section -->
+    <section id="produk-unggulan-section" class="py-16">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12 animate-on-scroll fade-in-up">Produk Unggulan Hari Ini</h2>
+        <div id="product-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- Konten produk akan dimuat secara dinamis di sini -->
+          <p class="text-center col-span-full text-gray-500">Memuat produk...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Promo Banner -->
+    <section id="promo-section" class="py-16">
+      <div class="container mx-auto px-4">
+        <div class="bg-sayurbox-primary text-white rounded-3xl p-8 md:p-16 flex flex-col md:flex-row items-center gap-8 animate-on-scroll fade-in-up">
+          <div class="md:w-1/2 text-center md:text-left">
+            <h2 class="text-3xl md:text-4xl font-bold">Promo Spesial Awal Bulan</h2>
+            <p class="mt-4 text-lg md:text-xl">Dapatkan diskon hingga 50% untuk semua produk pilihan. Jangan sampai kehabisan!</p>
+            <button class="mt-6 bg-white text-sayurbox-primary px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition duration-300">Lihat Semua Promo</button>
+          </div>
+          <div class="md:w-1/2 flex justify-center">
+            <img src="https://marketplace.canva.com/EAFL-qo5h9U/1/0/800w/canva-oranye-simpel-promosi-penjualan-buah-segar-instagram-post.-dc8ldBk1uAw.jpg" alt="Promo Spesial" class="rounded-2xl shadow-lg" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonial Section -->
+    <section id="testimoni-section" class="py-16">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-12 animate-on-scroll fade-in-up">Apa Kata Mereka?</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-sayurbox-primary animate-on-scroll scale-in animate-delay-100">
+            <p class="text-gray-600 italic">"Sangat terbantu dengan Toko Segar! Sayurnya segar dan pengirimannya cepat. Tidak perlu lagi ke pasar."</p>
+            <div class="mt-4 font-semibold text-gray-800">
+              <p>Wulan S.</p>
+              <p class="text-sm text-gray-500">Ibu Rumah Tangga</p>
+            </div>
+          </div>
+          <div class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-sayurbox-primary animate-on-scroll scale-in animate-delay-200">
+            <p class="text-gray-600 italic">"Kualitas buahnya premium dan harganya juga bersaing. Jadi langganan setiap minggu."</p>
+            <div class="mt-4 font-semibold text-gray-800">
+              <p>Joko P.</p>
+              <p class="text-sm text-gray-500">Karyawan Swasta</p>
+            </div>
+          </div>
+          <div class="bg-white p-8 rounded-2xl shadow-md border-t-4 border-sayurbox-primary animate-on-scroll scale-in animate-delay-300">
+            <p class="text-gray-600 italic">"Pelayanannya ramah dan produknya lengkap. Cocok buat yang sibuk tapi butuh bahan makanan berkualitas."</p>
+            <div class="mt-4 font-semibold text-gray-800">
+              <p>Dewi M.</p>
+              <p class="text-sm text-gray-500">Pebisnis Kuliner</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="kontak-section" class="bg-gray-800 text-gray-300 py-12">
+      <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div class="animate-on-scroll fade-in-up">
+          <h4 class="text-xl font-bold text-white mb-4">Toko Segar</h4>
+          <p>Belanja sayur dan buah segar secara online. Kualitas terjamin, harga bersaing, pengiriman cepat.</p>
+        </div>
+        <div class="animate-on-scroll fade-in-up animate-delay-200">
+          <h4 class="text-xl font-bold text-white mb-4">Layanan Pelanggan</h4>
+          <ul>
+            <li class="mb-2"><a href="#" class="hover:text-white">Tentang Kami</a></li>
+            <li class="mb-2"><a href="#" class="hover:text-white">Kebijakan Privasi</a></li>
+            <li class="mb-2"><a href="#" class="hover:text-white">Syarat & Ketentuan</a></li>
+          </ul>
+        </div>
+        <div class="animate-on-scroll fade-in-up animate-delay-400">
+          <h4 class="text-xl font-bold text-white mb-4">Hubungi Kami</h4>
+          <p>Email: info@tokosegar.com</p>
+          <p>Telepon: +62 812-3456-7890</p>
+        </div>
+        <div class="animate-on-scroll fade-in-up animate-delay-600">
+          <h4 class="text-xl font-bold text-white mb-4">Ikuti Kami</h4>
+          <div class="flex space-x-4">
+            <a href="#" class="hover:text-white"><i class="fab fa-facebook-f text-2xl"></i></a>
+            <a href="#" class="hover:text-white"><i class="fab fa-instagram text-2xl"></i></a>
+            <a href="#" class="hover:text-white"><i class="fab fa-twitter text-2xl"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-500">&copy; 2024 Toko Segar. All rights reserved.</div>
+    </footer>
+
+    <!-- Notification Modal -->
+    <div id="notification-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden flex items-center justify-center p-4">
+      <div class="bg-white rounded-lg p-6 max-w-sm w-full text-center shadow-lg">
+        <h3 class="text-xl font-bold text-gray-800">Berhasil!</h3>
+        <p id="notification-message" class="mt-2 text-gray-600"></p>
+        <button id="close-modal" class="mt-4 bg-sayurbox-primary text-white px-6 py-2 rounded-full font-semibold hover:bg-teal-700 transition duration-300">Tutup</button>
+      </div>
+    </div>
+
+    <!-- JavaScript untuk interaksi dan motion effects -->
+    <script>
+      // Toggles mobile menu
+      const menuToggle = document.getElementById('menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const scrollLinks = document.querySelectorAll('.scroll-link');
+      const productContainer = document.getElementById('product-container');
+      const notificationModal = document.getElementById('notification-modal');
+      const notificationMessage = document.getElementById('notification-message');
+      const closeModalButton = document.getElementById('close-modal');
+
+      // Data produk langsung di frontend
+      const products = [
+        {
+          id: 1,
+          name: 'Brokoli Segar',
+          price: 25000,
+          unit: '1 kg',
+          image: 'https://png.pngtree.com/png-vector/20250103/ourlarge/pngtree-fresh-green-broccoli-on-a-black-background-showcasing-vibrant-vegetable-texture-png-image_14921291.png',
+        },
+        { id: 2, name: 'Tomat Merah', price: 12000, unit: '500 gr', image: 'https://png.pngtree.com/png-vector/20240531/ourlarge/pngtree-fresh-red-tomatoes-png-image_12591484.png' },
+        { id: 3, name: 'Mangga Manis', price: 35000, unit: '1 kg', image: 'https://e7.pngegg.com/pngimages/516/731/png-clipart-sliced-green-mango-mango-adobe-illustrator-cut-mango-food-taobao.png' },
+        { id: 4, name: 'Ikan Salmon Fillet', price: 55000, unit: '250 gr', image: 'https://img.freepik.com/premium-psd/raw-salmon-fillet-isolated-transparent-white-background-png_888962-357.jpg' },
+      ];
+
+      menuToggle.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+
+      // Smooth scroll functionality for navigation links
+      scrollLinks.forEach((link) => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = link.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+
+          if (targetElement) {
+            const navbarHeight = document.querySelector('nav').offsetHeight;
+            const offsetPosition = targetElement.offsetTop - navbarHeight;
+
+            window.scrollTo({
+              top: offsetPosition,
+              behavior: 'smooth',
+            });
+
+            if (!mobileMenu.classList.contains('hidden')) {
+              mobileMenu.classList.add('hidden');
+            }
+          }
+        });
+      });
+
+      // Fungsi untuk mengambil produk dari data lokal dan menampilkannya
+      function renderProducts() {
+        // Kosongkan container produk sebelum mengisi
+        productContainer.innerHTML = '';
+
+        if (products.length === 0) {
+          productContainer.innerHTML = `<p class="text-center col-span-full text-gray-500">Tidak ada produk yang tersedia saat ini.</p>`;
+          return;
+        }
+
+        // Buat kartu produk untuk setiap item dengan animasi
+        products.forEach((product, index) => {
+          const productCard = document.createElement('div');
+          // Menambahkan kelas animasi dan delay berdasarkan indeks
+          const delayClass = `animate-delay-${100 * index}`;
+          productCard.classList.add('bg-white', 'rounded-2xl', 'shadow-md', 'overflow-hidden', 'animate-on-scroll', 'fade-in-up', delayClass);
+          productCard.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="font-bold text-xl text-gray-800">${product.name}</h3>
+                        <p class="text-gray-600 mt-2">${product.unit}</p>
+                        <div class="mt-4 flex justify-between items-center">
+                            <span class="text-2xl font-bold text-sayurbox-primary">Rp ${product.price.toLocaleString('id-ID')}</span>
+                            <button data-id="${product.id}" class="add-to-cart-btn bg-sayurbox-primary text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-teal-700 transition duration-300">
+                                <i class="fas fa-shopping-cart mr-2"></i>Tambah
+                            </button>
+                        </div>
+                    </div>
+                `;
+          productContainer.appendChild(productCard);
+        });
+
+        // Tambahkan event listener untuk tombol "Tambah" setelah produk dimuat
+        addCartEventListeners();
+
+        // Panggil observer untuk elemen-elemen yang baru dimuat
+        setupIntersectionObserver();
+      }
+
+      // Fungsi untuk menangani klik tombol "Tambah ke Keranjang"
+      function addCartEventListeners() {
+        const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+        addToCartButtons.forEach((button) => {
+          button.addEventListener('click', () => {
+            const productId = parseInt(button.getAttribute('data-id'));
+            const product = products.find((p) => p.id === productId);
+
+            if (product) {
+              notificationMessage.textContent = `${product.name} berhasil ditambahkan ke keranjang.`;
+              notificationModal.classList.remove('hidden');
+            }
+          });
+        });
+      }
+
+      // Memanggil fungsi saat halaman dimuat
+      window.onload = renderProducts;
+
+      // Close the notification modal
+      closeModalButton.addEventListener('click', () => {
+        notificationModal.classList.add('hidden');
+      });
+
+      // --- Intersection Observer untuk Animasi ---
+      function setupIntersectionObserver() {
+        const observerOptions = {
+          root: null,
+          rootMargin: '0px',
+          threshold: 0.1,
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('animated');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach((element) => {
+          observer.observe(element);
+        });
+      }
+    </script>
+  </body>
+</html>
